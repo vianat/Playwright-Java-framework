@@ -1,36 +1,32 @@
 package step_definitions;
 
+import browser.BrowserManager;
 import com.microsoft.playwright.*;
 import com.microsoft.playwright.options.AriaRole;
+import io.cucumber.java.PendingException;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.When;
 
 import java.awt.*;
 
 public class HomePage_Steps {
-    private final Page page;
-    private final BrowserContext browserContext;
-    private Page mostRecentPage;
+    public BrowserManager browserManager;
 
-    public HomePage_Steps() {
-        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-        int width = (int)screenSize.getWidth();
-        int height = (int)screenSize.getHeight();
-        Playwright playwright = Playwright.create();
-        Browser browser = playwright.chromium().launch(new BrowserType.LaunchOptions().setHeadless(false));
-        browserContext = browser.newContext(new Browser.NewContextOptions().setViewportSize(width, height));
-        page = browserContext.newPage();
+    public HomePage_Steps(BrowserManager browserManager) {
+        this.browserManager = browserManager;
     }
-    @Given("I navigate webdriveruniversity homepage")
-    public void i_navigate_webdriveruniversity_homepage() {
-        page.navigate("https://www.webdriveruniversity.com/");
+
+    @Given("I navigate {string} homepage")
+    public void navigate_to(String url) {
+        browserManager.page.navigate(url);
     }
+
     @When("I click on the contact us button")
     public void i_click_on_the_contact_us_button() {
-        mostRecentPage = browserContext.waitForPage(() -> {
-            page.getByRole(AriaRole.LINK, new Page.GetByRoleOptions().setName("CONTACT US Contact Us Form")).click();
+        browserManager.page = browserManager.context.waitForPage(() -> {
+            browserManager.page.getByRole(AriaRole.LINK, new Page.GetByRoleOptions().setName("CONTACT US Contact Us Form")).click();
         });
-        mostRecentPage.bringToFront();
-        mostRecentPage.getByPlaceholder("First Name").fill("Joe");
+        browserManager.page.bringToFront();
+        browserManager.page.getByPlaceholder("First Name").fill("Joe");
     }
 }

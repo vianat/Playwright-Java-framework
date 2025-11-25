@@ -1,7 +1,7 @@
 Feature: webdriveruniversity.com - Contact Us Page
 
   Scenario: Valid Contact Us Form Submission
-    Given I navigate webdriveruniversity homepage
+    Given I navigate "https://www.webdriveruniversity.com/" homepage
     When I click on the contact us button
     And I type a first name
     And I type a last name
