@@ -3,8 +3,10 @@ package step_definitions;
 import browser.BrowserManager;
 import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
+import io.cucumber.java.en.And;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+import net.datafaker.Faker;
 
 import java.awt.*;
 
@@ -12,43 +14,62 @@ import static com.microsoft.playwright.assertions.PlaywrightAssertions.assertTha
 
 public class ContactUs_Steps {
     public BrowserManager browserManager;
+    private final Faker faker = new Faker();
 
     public ContactUs_Steps(BrowserManager browserManager) {
         this.browserManager = browserManager;
     }
 
-    @When("I type a first name")
-    public void i_type_a_first_name() {
-        browserManager.page.getByPlaceholder("First Name").fill("Joe");
+    @And("I type a first name {string}")
+    public void i_type_a_first_name(String name) {
+        browserManager.page.getByPlaceholder("First Name").fill(name);
     }
 
-    @When("I type a last name")
-    public void i_type_a_last_name() {
-        browserManager.page.getByPlaceholder("Last Name").fill("Doe");
+    @And("I type a last name {string}")
+    public void i_type_a_last_name(String name) {
+        browserManager.page.getByPlaceholder("Last Name").fill(name);
     }
 
-    @When("I type a email address")
-    public void i_type_a_email_address() {
-        browserManager.page.getByPlaceholder("Email Address").fill("Joe@gmail.com");
+    @And("I type a email address {string}")
+    public void i_type_a_email_address(String email) {
+        browserManager.page.getByPlaceholder("Email Address").fill(email);
     }
 
-    @When("I type a comment")
-    public void i_type_a_comment() {
-        browserManager.page.getByPlaceholder("Comments").fill("Playwright");
+    @And("I type a comment {string}")
+    public void i_type_a_comment(String text) {
+        browserManager.page.getByPlaceholder("Comments").fill(text);
     }
 
-    @When("I click on the submit button")
+    @And("I click on the submit button")
     public void i_click_on_the_submit_button() {
         Page.WaitForSelectorOptions options = new Page.WaitForSelectorOptions().setTimeout(3000);
         browserManager.page.waitForSelector("input[value='SUBMIT']", options);
         browserManager.page.click("input[value='SUBMIT']");
     }
 
-    @Then("I should be presented with a successful contact us submission message")
-    public void i_should_be_presented_with_a_successful_contact_us_submission_message() {
+    @Then("I should be presented with a successful contact us submission message {string}")
+    public void i_should_be_presented_with_a_successful_contact_us_submission_message(String msg) {
         browserManager.page.waitForSelector("h1", new Page.WaitForSelectorOptions().setTimeout(3000));
         Locator locator = browserManager.page.locator("h1");
         assertThat(locator).isVisible();
-        assertThat(locator).hasText("Thank You for your Message!");
+        assertThat(locator).hasText(msg);
+    }
+
+    @And("I type a random first name")
+    public void i_type_a_random_first_name() {
+        String randomFirstName = faker.name().firstName();
+        browserManager.page.getByPlaceholder("First Name").fill(randomFirstName);
+    }
+
+    @And("I type a random last name")
+    public void i_type_a_random_last_name() {
+        String randomLastName = faker.name().lastName();
+        browserManager.page.getByPlaceholder("Last Name").fill(randomLastName);
+    }
+
+    @And("I type a random email address")
+    public void i_type_a_random_email_address() {
+        String randomEmail = faker.internet().emailAddress();
+        browserManager.page.getByPlaceholder("Email Address").fill(randomEmail);
     }
 }
