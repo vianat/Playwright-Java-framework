@@ -29,4 +29,13 @@ public class HomePage_Steps {
         browserManager.page.bringToFront();
         browserManager.page.getByPlaceholder("First Name").fill("Joe");
     }
+
+    @When("I click on the login portal button")
+    public void i_click_on_the_login_portal_button() {
+        browserManager.page = browserManager.context.waitForPage(() -> {
+            browserManager.page.getByRole(AriaRole.LINK, new Page.GetByRoleOptions().setName("LOGIN PORTAL Login Portal")).click();
+        });
+
+        browserManager.page.bringToFront();
+    }
 }

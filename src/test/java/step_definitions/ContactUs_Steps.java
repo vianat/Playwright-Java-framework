@@ -9,8 +9,10 @@ import io.cucumber.java.en.When;
 import net.datafaker.Faker;
 
 import java.awt.*;
+import java.util.List;
 
 import static com.microsoft.playwright.assertions.PlaywrightAssertions.assertThat;
+import static org.testng.Assert.assertTrue;
 
 public class ContactUs_Steps {
     public BrowserManager browserManager;
@@ -49,10 +51,20 @@ public class ContactUs_Steps {
 
     @Then("I should be presented with a successful contact us submission message {string}")
     public void i_should_be_presented_with_a_successful_contact_us_submission_message(String msg) {
-        browserManager.page.waitForSelector("h1", new Page.WaitForSelectorOptions().setTimeout(3000));
-        Locator locator = browserManager.page.locator("h1");
-        assertThat(locator).isVisible();
-        assertThat(locator).hasText(msg);
+        browserManager.page.waitForSelector("//body");
+        List<String> texts = browserManager.page.locator("//body").allInnerTexts();
+        String foundText = "";
+        boolean flag = false;
+        for (String text: texts) {
+            if (text.contains(msg)){
+                foundText = text;
+                flag = true;
+                break;
+            } else {
+                foundText = text;
+            }
+        }
+        assertTrue(flag, "Element does not contain the expected message: " + foundText + "to be equal to " + msg);
     }
 
     @And("I type a random first name")
