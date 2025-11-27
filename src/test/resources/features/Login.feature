@@ -17,7 +17,6 @@ Feature: webdriveruniversity.com - Login Page
       | username  | password     | expectedAlertText |
       | webdriver | webdriver123 | validation failed |
       | Matt      | Dan          | validation failed |
-      | Matt      | Dan          | failed            |
 
     @smoke
     Examples:

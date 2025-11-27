@@ -12,10 +12,14 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class BrowserManager {
-    public Playwright playwright;         // used to create an instance of Chrome, FF, etc.
-    public Page page;                     // single tab or window in the browser
-    public BrowserContext context; // is the isolated browser session
-    public Browser browser;              // represents the browser instance
+    private static final ThreadLocal<Playwright> playwright = new ThreadLocal<>();
+    private static final ThreadLocal<Browser> browser = new ThreadLocal<>();
+    private static final ThreadLocal<BrowserContext> context = new ThreadLocal<>();
+    private static final ThreadLocal<Page> page = new ThreadLocal<>();
+//    public Playwright playwright;         // used to create an instance of Chrome, FF, etc.
+//    public Page page;                     // single tab or window in the browser
+//    public BrowserContext context;        // is the isolated browser session
+//    public Browser browser;               // represents the browser instance
     public Properties properties;
     private static final Logger logger = Logger.getLogger(BrowserManager.class.getName());
 
@@ -31,27 +35,74 @@ public class BrowserManager {
         }
     }
 
+    public Page getPage() {
+        return page.get();
+    }
+
+    public void setPage(Page newPage) {
+        page.set(newPage);
+    }
+
+    public BrowserContext getContext() {
+        return context.get();
+    }
+
     public  byte[] takeScreenshot() {
-        if (page != null) {
-            return page.screenshot();
+        if (page.get() != null) {
+            return page.get().screenshot();
         }
         return new byte[0];
     }
 
     public void setUp() {
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        String browserType = properties.getProperty("browser", "chromium");
+        String headlessType = properties.getProperty("headless", "false");
         int width = (int)screenSize.getWidth();
         int height = (int)screenSize.getHeight();
 
-        playwright = Playwright.create();
-        browser = playwright.chromium().launch(new BrowserType.LaunchOptions().setHeadless(false));
-        context = browser.newContext(new Browser.NewContextOptions().setViewportSize(width, height));
-        page = context.newPage();
+        try {
+            playwright.set(Playwright.create());
+            BrowserType.LaunchOptions launchOptions = new BrowserType.LaunchOptions()
+                    .setHeadless(Boolean.parseBoolean(headlessType))
+                    .setArgs(java.util.Arrays.asList("--start-fullscreen"));
+            Browser.NewContextOptions contextOptions = new Browser.NewContextOptions()
+                    .setViewportSize(width, height);
+
+            switch (browserType.toLowerCase()) {
+                case "chromium":
+                    browser.set(playwright.get().chromium().launch(launchOptions));
+                    break;
+                case "firefox":
+                    browser.set(playwright.get().firefox().launch(launchOptions));
+                    break;
+                case "safari":
+                case "webkit":
+                    browser.set(playwright.get().webkit().launch(launchOptions));
+                    break;
+                default:
+                    logger.warning("unsupported browser type " + browserType + " run on chromium");
+                    browser.set(playwright.get().chromium().launch(launchOptions));
+                    break;
+            }
+
+            context.set(browser.get().newContext(contextOptions));
+            page.set(context.get().newPage());
+//            logger.info("browser set");
+        } catch (Exception e) {
+            logger.log(Level.SEVERE, "Failed to setup Playwright! ", e);
+        }
     }
 
     public void tearDown() {
-        if (page != null) page.close();
-        if (browser != null) browser.close();
-        if (playwright != null) playwright.close();
+        try {
+            if (page.get() != null) page.get().close();
+            if (context.get() != null) context.get().close();
+            if (browser.get() != null) browser.get().close();
+            if (playwright.get() != null) playwright.get().close();
+        } catch (Exception e) {
+            logger.log(Level.SEVERE, "Failed to close Playwright");
+        }
+//        logger.info("tear down complete");
     }
 }

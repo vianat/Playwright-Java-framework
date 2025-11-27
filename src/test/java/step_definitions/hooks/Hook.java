@@ -10,23 +10,19 @@ public class Hook {
         this.browserManager = browserManager;
     }
 
-    // Runs before all test starts
     @BeforeAll
     public static void beforeAll() {
     }
 
-    // Runs after all test done
     @AfterAll
     public static void afterAll() {
     }
 
-    // Runs before each test
     @Before
     public void setup() {
         browserManager.setUp();
     }
 
-    // Runs after each test
     @After
     public void tearDown(Scenario scenario) {
         if (scenario.isFailed()) {
