@@ -1,3 +1,4 @@
+@regression @login
 Feature: webdriveruniversity.com - Login Page
 
   Background: Pre conditions
@@ -13,7 +14,14 @@ Feature: webdriveruniversity.com - Login Page
     Then I should be presented with an alert box with contains text "<expectedAlertText>"
 
     Examples:
-      | username  | password     | expectedAlertText    |
+      | username  | password     | expectedAlertText |
       | webdriver | webdriver123 | validation failed |
-      | Matt      | Dan          | validation failed    |
+      | Matt      | Dan          | validation failed |
+      | Matt      | Dan          | failed            |
+
+    @smoke
+    Examples:
+      | username  | password     | expectedAlertText |
+      | webdriver | webdriver123 | validation failed |
+      | Matt      | Dan          | validation failed |
 

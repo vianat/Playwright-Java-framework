@@ -1,3 +1,4 @@
+@regression @contact-us
 Feature: webdriveruniversity.com - Contact Us Page
 
   Background: Pre conditions
@@ -17,6 +18,13 @@ Feature: webdriveruniversity.com - Contact Us Page
       | Sarah | Woods     | sara_woods@gmail.com | Hello   | Thank You for your Message!  |
       | Matt  | Dan       | matt_dan             | its me  | Error: Invalid email address |
 
+    @smoke
+    Examples:
+      | name  | last name | email                | comment | message                      |
+      | Sarah | Woods     | sara_woods@gmail.com | Hello   | Thank You for your Message!  |
+      | Matt  | Dan       | matt_dan             | its me  | Error: Invalid email address |
+
+  @smoke
   Scenario: Valid Contact Us Form Submission - Using random data
     And I type a random first name
     And I type a random last name
