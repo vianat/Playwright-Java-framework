@@ -19,12 +19,10 @@ import static org.testng.Assert.assertTrue;
 public class ContactUs_Steps {
     public BrowserManager browserManager;
     private final Faker faker = new Faker();
-    private final PersonContext personContext;
     private final ContactUsPage contactUsPage;
 
-    public ContactUs_Steps(BrowserManager browserManager, PersonContext personContext, ContactUsPage contactUsPage) {
+    public ContactUs_Steps(BrowserManager browserManager, ContactUsPage contactUsPage) {
         this.browserManager = browserManager;
-        this.personContext = personContext;
         this.contactUsPage = contactUsPage;
     }
 
@@ -58,24 +56,4 @@ public class ContactUs_Steps {
         contactUsPage.verifySuccessfulSubmissionMessage(msg);
     }
 
-    @And("I type a random first name")
-    public void i_type_a_random_first_name() {
-        String randomFirstName = faker.name().firstName();
-        personContext.setRandomFirstName(randomFirstName);
-        browserManager.getPage().getByPlaceholder("First Name").fill(randomFirstName);
-    }
-
-    @And("I type a random last name")
-    public void i_type_a_random_last_name() {
-        String randomLastName = faker.name().lastName();
-        personContext.setRandomLastName(randomLastName);
-        browserManager.getPage().getByPlaceholder("Last Name").fill(randomLastName);
-    }
-
-    @And("I type a random email address")
-    public void i_type_a_random_email_address() {
-        String randomEmail = faker.internet().emailAddress();
-        personContext.setRandomEmail(randomEmail);
-        browserManager.getPage().getByPlaceholder("Email Address").fill(randomEmail);
-    }
 }

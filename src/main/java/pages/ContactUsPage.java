@@ -1,9 +1,7 @@
 package pages;
 
 import browser.BrowserManager;
-
 import java.util.List;
-
 import static org.testng.Assert.assertTrue;
 
 public class ContactUsPage extends Base {

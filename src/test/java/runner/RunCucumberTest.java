@@ -1,6 +1,5 @@
 package runner;
 
-import browser.BrowserManager;
 import io.cucumber.testng.AbstractTestNGCucumberTests;
 import io.cucumber.testng.CucumberOptions;
 import org.testng.TestNG;
@@ -8,14 +7,11 @@ import org.testng.annotations.DataProvider;
 import org.testng.xml.XmlClass;
 import org.testng.xml.XmlSuite;
 import org.testng.xml.XmlTest;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Collection;
-import java.util.Collections;
 import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
