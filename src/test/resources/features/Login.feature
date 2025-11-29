@@ -4,6 +4,7 @@ Feature: Login Page
   Background: Pre conditions
     Given I navigate "https://www.webdriveruniversity.com/" homepage
 
+  @login
   Scenario Outline: Validate valid & invalid login credentials
     When I click on the login portal button
     And I type a username "<username>"

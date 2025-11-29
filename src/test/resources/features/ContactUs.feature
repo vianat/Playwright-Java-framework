@@ -5,6 +5,7 @@ Feature: Contact Us Page
     Given I navigate "https://www.webdriveruniversity.com/" homepage
     When I click on the contact us button
 
+  @contact-us
   Scenario Outline: Valid Contact Us Form Submission
     And I type a first name "<name>"
     And I type a last name "<last name>"
