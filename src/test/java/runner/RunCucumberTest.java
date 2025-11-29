@@ -19,7 +19,7 @@ import java.util.logging.Logger;
 @CucumberOptions(
         features = "src/test/resources/features",
         glue = "step_definitions",
-        tags = "@login",
+        tags = "@regression",
         plugin = {"pretty", "json:target/report.json", "html:target/report.html"}
 )
 public class RunCucumberTest extends AbstractTestNGCucumberTests {

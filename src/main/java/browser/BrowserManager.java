@@ -56,13 +56,19 @@ public class BrowserManager {
 
     public void setUp() {
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-        String browserType = properties.getProperty("browser", "chromium");
+//        String browserType = properties.getProperty("browser", "chromium");
         String headlessType = properties.getProperty("headless", "false");
         int width = (int)screenSize.getWidth();
         int height = (int)screenSize.getHeight();
 
         try {
             playwright.set(Playwright.create());
+
+            String browserType = System.getProperty("BROWSER");
+            if (browserType == null || browserType.isEmpty()) {
+                browserType = properties.getProperty("browser", "chromium");
+            }
+
             BrowserType.LaunchOptions launchOptions = new BrowserType.LaunchOptions()
                     .setHeadless(Boolean.parseBoolean(headlessType))
                     .setArgs(java.util.Arrays.asList("--start-fullscreen"));
@@ -94,7 +100,6 @@ public class BrowserManager {
             page.get().setDefaultNavigationTimeout(navigationTimeout);
             page.get().setDefaultTimeout(actionTimeout);
 
-//            logger.info("browser set");
         } catch (Exception e) {
             logger.log(Level.SEVERE, "Failed to setup Playwright! ", e);
         }
@@ -109,6 +114,5 @@ public class BrowserManager {
         } catch (Exception e) {
             logger.log(Level.SEVERE, "Failed to close Playwright");
         }
-//        logger.info("tear down complete");
     }
 }
