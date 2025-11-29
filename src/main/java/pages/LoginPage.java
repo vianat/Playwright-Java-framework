@@ -2,12 +2,14 @@ package pages;
 
 import browser.BrowserManager;
 import com.microsoft.playwright.Locator;
+import com.microsoft.playwright.Page;
+import com.microsoft.playwright.options.AriaRole;
 import org.testng.Assert;
 
 public class LoginPage extends Base {
     private String alertText;
 
-    public LoginPage(BrowserManager browserManager, LoginPage loginPage) {
+    public LoginPage(BrowserManager browserManager) {
         super(browserManager);
     }
 
@@ -21,12 +23,11 @@ public class LoginPage extends Base {
 
     public void clickLoginButton() {
         getBrowserManager().getPage().onceDialog(dialog -> {
+            System.out.println(String.format("Dialog message: %s", dialog.message()));
             alertText = dialog.message();
             dialog.accept();
         });
-
-        Locator loginButton = getBrowserManager().getPage().locator("#login-button");
-        waitAndClick(loginButton);
+        waitAndClickByRole("BUTTON", "Login");
     }
 
     public void verifyAlertText(String expectedAlertText) {
