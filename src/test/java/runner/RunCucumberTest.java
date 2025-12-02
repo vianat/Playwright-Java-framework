@@ -44,12 +44,8 @@ public class RunCucumberTest extends AbstractTestNGCucumberTests {
         XmlTest test = new XmlTest(suite);
         test.setName("Cucumber Test");
 
-        // Важно: установить preserveOrder = true и использовать специальное имя data provider
         test.setPreserveOrder(true);
-
-        // Указываем класс, который содержит data provider для Cucumber
         test.setXmlClasses(java.util.Collections.singletonList(new XmlClass(RunCucumberTest.class)));
-
         testNG.setXmlSuites(java.util.Collections.singletonList(suite));
 
         // disable default TestNG report
