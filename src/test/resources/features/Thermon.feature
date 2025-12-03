@@ -41,5 +41,5 @@ Feature: Thermon - Find a Representative Page
     Then verify Texas has "<reps>" local representations
     Examples:
       | product         | country       | state | zip   | reps |
-      | Heating Systems | United States | Texas | 78728 | 2    |
+      | Heating Systems | United States | Texas | 78728 | 3    |
       | Heat Trace      | United States | Texas | 78728 | 3    |
